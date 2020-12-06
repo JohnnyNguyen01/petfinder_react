@@ -1,8 +1,19 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { SET_AUTH_ERROR, SET_LOADING, SET_USER, SIGNUP_USER } from "../types";
+import {
+  SET_AUTH_ERROR,
+  SET_IS_SIGNED_IN,
+  SET_LOADING,
+  SET_USER,
+  SIGNUP_USER,
+} from "../types";
 
 export default (state, action) => {
   switch (action.type) {
+    case SET_IS_SIGNED_IN:
+      return {
+        ...state,
+        isSignedIn: action.payload,
+      };
     case SET_USER:
       return {
         ...state,

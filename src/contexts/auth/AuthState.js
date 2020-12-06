@@ -7,6 +7,7 @@ import {
   SET_USER,
   SET_AUTH_ERROR,
   SET_LOADING,
+  SET_IS_SIGNED_IN,
 } from "../types";
 import { auth } from "../../firebase";
 
@@ -15,9 +16,13 @@ const AuthState = (props) => {
     user: {},
     error: "",
     loading: false,
+    isSignedIn: false,
   };
 
   const [state, dispatch] = useReducer(AuthReducer, initialState);
+
+  const setIsSignedIn = () =>
+    dispatch({ type: SET_IS_SIGNED_IN, payload: true });
 
   /**
    * Sign up a new user via email and password, and set the {state.user} object
@@ -28,6 +33,7 @@ const AuthState = (props) => {
   const signUp = async (email, password) => {
     await auth.createUserWithEmailAndPassword(email, password);
     auth.onAuthStateChanged((user) => setUser(user));
+    setIsSignedIn();
   };
 
   /**
@@ -40,7 +46,7 @@ const AuthState = (props) => {
       await auth.signInWithEmailAndPassword(email, password);
       auth.onAuthStateChanged((user) => setUser(user));
     } catch (e) {
-        setAuthError(e);
+      setAuthError(e);
     }
   };
 
@@ -52,6 +58,10 @@ const AuthState = (props) => {
     dispatch({ type: SET_AUTH_ERROR, payload: error });
   };
 
+  /**
+   * Set the user state object
+   * @param {object} user
+   */
   const setUser = (user) => {
     console.log(user);
     dispatch({ type: SET_USER, payload: user });
@@ -65,6 +75,7 @@ const AuthState = (props) => {
         user: state.user,
         error: state.error,
         loading: state.loading,
+        isSignedIn: state.isSignedIn,
         setAuthError,
         setLoading,
         signUp,
