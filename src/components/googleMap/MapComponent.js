@@ -33,6 +33,7 @@ const MapComponent = (props) => {
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{ disableDefaultUI: true }}
+        onClick={(e) => console.log(`lat: ${e.latLng.lat()} \nlng: ${e.latLng.lng()}`)}
       >
         {props.children}
       </GoogleMap>
