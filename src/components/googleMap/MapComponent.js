@@ -1,10 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, {useState } from "react";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
-import MapComponentContext from "../../contexts/mapComponent/mapComponentContext";
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
-  const mapComponentContext = useContext(MapComponentContext);
 
   const containerStyle = {
     width: "100%",
@@ -34,7 +32,7 @@ const MapComponent = (props) => {
         zoom={10}
         onLoad={onLoad}
         onUnmount={onUnmount}
-        options={{disableDefaultUI: true,}}
+        options={{ disableDefaultUI: true }}
       >
         {props.children}
       </GoogleMap>

@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 import AuthContext from "./authContext";
 import AuthReducer from "./AuthReducer";
+import { auth } from "../../firebase";
 import {
   SIGNUP_USER,
   LOGIN,
@@ -9,7 +10,7 @@ import {
   SET_LOADING,
   SET_IS_SIGNED_IN,
 } from "../types";
-import { auth } from "../../firebase";
+
 
 const AuthState = (props) => {
   const initialState = {
