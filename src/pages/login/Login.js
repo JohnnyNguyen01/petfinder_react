@@ -1,12 +1,13 @@
 import React, { useContext, useRef } from "react";
 import { Container, Form, Card, Button, Alert } from "react-bootstrap";
 import AuthContext from "../../contexts/auth/authContext";
-import { Link } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 
 const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const authContext = useContext(AuthContext);
+  let history = useHistory();
 
   const handleSubmit = (e) => {
     const email = emailRef.current.value;
@@ -17,9 +18,9 @@ const Login = () => {
     } else if (password === null || password === "") {
       authContext.setAuthError("Password cannot be empty");
     } else {
-      try{
+      try {
         authContext.loginUser(email, password);
-      } catch (e){
+      } catch (e) {
         //   authContext.setAuthError(e.message);
         console.log(e.message);
       }

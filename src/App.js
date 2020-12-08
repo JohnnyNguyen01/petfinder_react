@@ -1,6 +1,5 @@
 import React from "react";
 import SignUp from "./pages/signup/SignUp";
-import { Container } from "react-bootstrap";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import AuthState from "./contexts/auth/AuthState";
 import Home from "./pages/home/Home";
@@ -12,7 +11,8 @@ function App() {
     <AuthState>
       <BrowserRouter>
         <Switch>
-          <PrivateRoute exact path="/" component={Home} />
+          {/* //todo: change "/" to private route */}
+          <Route exact path="/" component={Home} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/login" component={Login} />
         </Switch>

@@ -22,7 +22,7 @@ const AuthState = (props) => {
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   const setIsSignedIn = () =>
-    dispatch({ type: SET_IS_SIGNED_IN, payload: true });
+    dispatch({ type: SET_IS_SIGNED_IN, payload: !state.isSignedIn });
 
   /**
    * Sign up a new user via email and password, and set the {state.user} object
@@ -32,8 +32,11 @@ const AuthState = (props) => {
    */
   const signUp = async (email, password) => {
     await auth.createUserWithEmailAndPassword(email, password);
-    auth.onAuthStateChanged((user) => setUser(user));
-    setIsSignedIn();
+    auth.onAuthStateChanged((user) => {
+      setUser(user);
+      setIsSignedIn();
+    });
+    
   };
 
   /**
@@ -45,6 +48,7 @@ const AuthState = (props) => {
     try {
       await auth.signInWithEmailAndPassword(email, password);
       auth.onAuthStateChanged((user) => setUser(user));
+      setIsSignedIn();
     } catch (e) {
       setAuthError(e);
     }
