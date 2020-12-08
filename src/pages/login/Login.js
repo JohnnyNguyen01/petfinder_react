@@ -20,7 +20,7 @@ const Login = () => {
     } else {
       try {
         authContext.loginUser(email, password);
-      } catch (e) {
+      } catch (e) { 
         //   authContext.setAuthError(e.message);
         console.log(e.message);
       }

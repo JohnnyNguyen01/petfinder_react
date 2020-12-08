@@ -4,35 +4,28 @@ import MapComponentContext from "../../contexts/mapComponent/mapComponentContext
 import { Marker } from "@react-google-maps/api";
 
 const Home = () => {
-  const [markerPosition, setMarkerPosition] = useState({
-    latitude: -33.865143,
-    longitude: 151.2099,
-  });
   const mapComponentContext = useContext(MapComponentContext);
-
+  const { marker } = mapComponentContext;
   //Methods
   const getLatestMarker = async () => mapComponentContext.setLatestMarker();
-  const setMarker = () => {
-    const { coordinates } = mapComponentContext.marker;
-    setMarkerPosition(coordinates);
-  };
 
   useEffect(() => {
     getLatestMarker();
-    setMarker();
-    console.log(markerPosition);
+    console.log(`${marker} obtained`);
     // eslint-disable-next-line
-  }, [markerPosition]);
+  }, []);
 
   return (
     <div>
       <MapComponent>
-        <Marker
-          position={{
-            lat: markerPosition.latitude,
-            lng: markerPosition.longitude,
-          }}
-        />
+        {Object.keys(marker).length !== 0 ? (
+          <Marker
+            position={{
+              lat: marker.coordinates.latitude,
+              lng: marker.coordinates.longitude,
+            }}
+          />
+        ) : null}
       </MapComponent>
     </div>
   );
