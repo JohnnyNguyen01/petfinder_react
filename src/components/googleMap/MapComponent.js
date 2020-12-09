@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
-import { Button, ButtonGroup } from "react-bootstrap";
+import { Button, ButtonGroup, DropdownButton, Dropdown } from "react-bootstrap";
 import "./MapComponent.css";
+import AuthContext from "../../contexts/auth/authContext";
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
+  const authContext = useContext(AuthContext);
 
   const containerStyle = {
     width: "100%",
@@ -14,6 +16,10 @@ const MapComponent = (props) => {
   const center = {
     lat: -33.865143,
     lng: 151.2099,
+  };
+
+  const handleLogoutBtn = () => {
+    authContext.logoutUser();
   };
 
   const onLoad = React.useCallback(function callback(map) {
@@ -40,12 +46,16 @@ const MapComponent = (props) => {
         }
       >
         {props.children}
-
-        <ButtonGroup className="mb-2 button-group" size="lg">
-          <Button>Left</Button>
-          <Button>Middle</Button>
-          <Button>Right</Button>
-        </ButtonGroup>
+        <DropdownButton
+          id="dropdown-basic-button"
+          title="Actions"
+          className="button-group mb-2"
+          size="lg"
+        >
+          <Dropdown.Item href="#/action-1">Set Geofence</Dropdown.Item>
+          <Dropdown.Item href="#/action-2">Remove Geofence </Dropdown.Item>
+          <Dropdown.Item onClick={handleLogoutBtn}>Logout</Dropdown.Item>
+        </DropdownButton>
       </GoogleMap>
     </LoadScript>
   );

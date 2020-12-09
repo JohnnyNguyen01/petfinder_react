@@ -1,5 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import {
+  LOGOUT,
   SET_AUTH_ERROR,
   SET_IS_SIGNED_IN,
   SET_LOADING,
@@ -13,6 +14,12 @@ export default (state, action) => {
       return {
         ...state,
         isSignedIn: action.payload,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        isSignedIn: false,
+        user: {},
       };
     case SET_USER:
       return {

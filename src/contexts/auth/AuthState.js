@@ -5,12 +5,12 @@ import { auth } from "../../firebase";
 import {
   SIGNUP_USER,
   LOGIN,
+  LOGOUT,
   SET_USER,
   SET_AUTH_ERROR,
   SET_LOADING,
   SET_IS_SIGNED_IN,
 } from "../types";
-
 
 const AuthState = (props) => {
   const initialState = {
@@ -37,7 +37,6 @@ const AuthState = (props) => {
       setUser(user);
       setIsSignedIn();
     });
-    
   };
 
   /**
@@ -56,6 +55,19 @@ const AuthState = (props) => {
   };
 
   /**
+   * Signs out the currently logged in user
+   */
+  const logoutUser = async () => {
+    try {
+      await auth.signOut();
+      dispatch({type: LOGOUT});
+      return "Sign out successful";
+    } catch (e) {
+      return `Sign out error: ${e.message}`;
+    }
+  };
+
+  /**
    * Set the error for if a login or a signup attempt fails
    * @param {*} error
    */
@@ -68,10 +80,12 @@ const AuthState = (props) => {
    * @param {object} user
    */
   const setUser = (user) => {
-    console.log(user);
     dispatch({ type: SET_USER, payload: user });
   };
 
+  /**
+   * Used to indicate whether auth is in a loading state after logging in/out
+   */
   const setLoading = () => dispatch({ type: SET_LOADING });
 
   return (
@@ -86,6 +100,7 @@ const AuthState = (props) => {
         signUp,
         setUser,
         loginUser,
+        logoutUser,
       }}
     >
       {props.children}

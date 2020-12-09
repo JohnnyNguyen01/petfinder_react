@@ -8,6 +8,7 @@
     /* margin-left: 45%;
     margin-top: 62%; */
     position: absolute;
-    bottom: 0;
-    left: 45vw;
+    top: 5px;
+    right: 7vw;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
