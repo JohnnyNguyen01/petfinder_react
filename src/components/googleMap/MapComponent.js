@@ -1,12 +1,22 @@
-import React, { useState, useContext } from "react";
-import { GoogleMap, LoadScript } from "@react-google-maps/api";
-import { Button, ButtonGroup, DropdownButton, Dropdown } from "react-bootstrap";
+import React, { useState, useContext, useEffect } from "react";
+import { GoogleMap, LoadScript, Polygon } from "@react-google-maps/api";
 import "./MapComponent.css";
 import AuthContext from "../../contexts/auth/authContext";
+import MapComponentContext from "../../contexts/mapComponent/mapComponentContext";
+import CustomPopover from "../CustomPopover";
+
+import { DropdownButton, Dropdown, OverlayTrigger } from "react-bootstrap";
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
+  const [fencePoints, setGeofencePoints] = useState([]);
   const authContext = useContext(AuthContext);
+  const mapComponentContext = useContext(MapComponentContext);
+  const {
+    geofencePoints,
+    canSetGeofence,
+    addGeofencePoint,
+  } = mapComponentContext;
 
   const containerStyle = {
     width: "100%",
@@ -22,15 +32,41 @@ const MapComponent = (props) => {
     authContext.logoutUser();
   };
 
+  const handleSetGeofenceBtn = () =>
+    mapComponentContext.setCanSetGeofence(true);
+
+  const addGeofencePoints = (latLngObject) => {
+    if (canSetGeofence) addGeofencePoint(latLngObject);
+  };
+
   const onLoad = React.useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
     map.fitBounds(bounds);
     setMap(map);
   }, []);
 
+  const onPolygonLoad = (polygon) => {
+    console.log("polygon: ", polygon);
+  };
+
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null);
   }, []);
+
+  const polygonOptions = {
+    fillColor: "lightblue",
+    fillOpacity: 1,
+    strokeColor: "red",
+    strokeOpacity: 1,
+    strokeWeight: 2,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    geodesic: false,
+    zIndex: 1,
+  };
+
+  useEffect(() => {}, [canSetGeofence, geofencePoints]);
 
   return (
     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
@@ -41,18 +77,42 @@ const MapComponent = (props) => {
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{ disableDefaultUI: true }}
-        onClick={(e) =>
-          console.log(`lat: ${e.latLng.lat()} \nlng: ${e.latLng.lng()}`)
+        onClick={
+          (e) => addGeofencePoint({ lat: e.latLng.lat(), lng: e.latLng.lng() }) //{ lat: e.latLng.lat(), lng: e.latLng.lng() })
         }
       >
         {props.children}
+        {Object.keys(geofencePoints).length !== 0 ? (
+          <Polygon
+            onLoad={onPolygonLoad}
+            paths={geofencePoints}
+            options={polygonOptions}
+          />
+        ) : null}
         <DropdownButton
           id="dropdown-basic-button"
           title="Actions"
           className="button-group mb-2"
           size="lg"
         >
-          <Dropdown.Item href="#/action-1">Set Geofence</Dropdown.Item>
+          <OverlayTrigger
+            trigger="click"
+            key="set-geofence-trigger"
+            placement="left"
+            overlay={
+              <CustomPopover
+                placement="right"
+                title="Set Geofence Activated"
+                content={
+                  "You can now set your geofence on the map, when finished, click on Set Geofence again."
+                }
+              />
+            }
+          >
+            <Dropdown.Item href="#/action-1" onClick={handleSetGeofenceBtn}>
+              Set Geofence
+            </Dropdown.Item>
+          </OverlayTrigger>
           <Dropdown.Item href="#/action-2">Remove Geofence </Dropdown.Item>
           <Dropdown.Item onClick={handleLogoutBtn}>Logout</Dropdown.Item>
         </DropdownButton>
