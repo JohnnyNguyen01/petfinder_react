@@ -7,10 +7,10 @@ import {
   SET_LATEST_MARKER,
   SET_CAN_SET_GEOGENCE,
   ADD_GEOFENCE_POINT,
+  RESET_GEOFENCE,
 } from "../types";
 
 const MapComponentState = (props) => {
-  
   const initialState = {
     marker: {},
     geofencePoints: [],
@@ -40,7 +40,7 @@ const MapComponentState = (props) => {
    * @param {object} latLngObject - the lat lng to be added
    */
   const addGeofencePoint = (latLngObject) => {
-    const updatedGeofencePoints =  [...state.geofencePoints, latLngObject];//state.geofencePoints.push(latLngObject);
+    const updatedGeofencePoints = [...state.geofencePoints, latLngObject]; //state.geofencePoints.push(latLngObject);
     dispatch({ type: ADD_GEOFENCE_POINT, payload: updatedGeofencePoints });
   };
 
@@ -53,6 +53,11 @@ const MapComponentState = (props) => {
     dispatch({ type: SET_CAN_SET_GEOGENCE, payload: !state.canSetGeofence });
   };
 
+  /**
+   * Reset the `geofencePoints` array.
+   */
+  const resetGeofencePoints = () => dispatch({ type: RESET_GEOFENCE });
+
   return (
     <MapComponentContext.Provider
       value={{
@@ -63,6 +68,7 @@ const MapComponentState = (props) => {
         setGeofencePoints,
         setCanSetGeofence,
         addGeofencePoint,
+        resetGeofencePoints
       }}
     >
       {props.children}

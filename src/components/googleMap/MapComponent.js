@@ -4,18 +4,18 @@ import "./MapComponent.css";
 import AuthContext from "../../contexts/auth/authContext";
 import MapComponentContext from "../../contexts/mapComponent/mapComponentContext";
 import CustomPopover from "../CustomPopover";
-
 import { DropdownButton, Dropdown, OverlayTrigger } from "react-bootstrap";
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
-  const [fencePoints, setGeofencePoints] = useState([]);
   const authContext = useContext(AuthContext);
   const mapComponentContext = useContext(MapComponentContext);
+
   const {
     geofencePoints,
     canSetGeofence,
     addGeofencePoint,
+    resetGeofencePoints,
   } = mapComponentContext;
 
   const containerStyle = {
@@ -32,12 +32,11 @@ const MapComponent = (props) => {
     authContext.logoutUser();
   };
 
-  const handleSetGeofenceBtn = () =>
+  const handleSetGeofenceBtn = () => {
     mapComponentContext.setCanSetGeofence(true);
-
-  const addGeofencePoints = (latLngObject) => {
-    if (canSetGeofence) addGeofencePoint(latLngObject);
   };
+
+  const handleRemoveGeofenceBtn = () => resetGeofencePoints();
 
   const onLoad = React.useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
@@ -55,13 +54,13 @@ const MapComponent = (props) => {
 
   const polygonOptions = {
     fillColor: "lightblue",
-    fillOpacity: 1,
-    strokeColor: "red",
+    fillOpacity: 0.5,
+    strokeColor: "lightblue",
     strokeOpacity: 1,
     strokeWeight: 2,
     clickable: false,
     draggable: false,
-    editable: false,
+    editable: true,
     geodesic: false,
     zIndex: 1,
   };
@@ -87,6 +86,8 @@ const MapComponent = (props) => {
             onLoad={onPolygonLoad}
             paths={geofencePoints}
             options={polygonOptions}
+            editable={true}
+            draggable={true}
           />
         ) : null}
         <DropdownButton
@@ -113,7 +114,9 @@ const MapComponent = (props) => {
               Set Geofence
             </Dropdown.Item>
           </OverlayTrigger>
-          <Dropdown.Item href="#/action-2">Remove Geofence </Dropdown.Item>
+          <Dropdown.Item href="#/action-2" onClick={handleRemoveGeofenceBtn}>
+            Remove Geofence{" "}
+          </Dropdown.Item>
           <Dropdown.Item onClick={handleLogoutBtn}>Logout</Dropdown.Item>
         </DropdownButton>
       </GoogleMap>
