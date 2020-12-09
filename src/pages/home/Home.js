@@ -7,6 +7,7 @@ const Home = () => {
   const mapComponentContext = useContext(MapComponentContext);
   const [markerSelected, setMarkerSelected] = useState(false);
   const { marker } = mapComponentContext;
+  
   //Methods
   //todo: add timer onto this function to run every 5-15 seconds
   const getLatestMarker = async () => mapComponentContext.setLatestMarker();

@@ -1,13 +1,20 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { Container, Form, Card, Button, Alert } from "react-bootstrap";
 import AuthContext from "../../contexts/auth/authContext";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const authContext = useContext(AuthContext);
   let history = useHistory();
+
+  useEffect(() => {
+    if(authContext.isSignedIn){
+      history.push("/");
+    }
+    //eslint-disable-next-line
+  }, [authContext.isSignedIn]);
 
   const handleSubmit = (e) => {
     const email = emailRef.current.value;
@@ -20,7 +27,7 @@ const Login = () => {
     } else {
       try {
         authContext.loginUser(email, password);
-      } catch (e) { 
+      } catch (e) {
         //   authContext.setAuthError(e.message);
         console.log(e.message);
       }

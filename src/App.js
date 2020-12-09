@@ -14,7 +14,7 @@ function App() {
         <BrowserRouter>
           <Switch>
             {/* //todo: change "/" to private route */}
-            <Route exact path="/" component={Home} />
+            <PrivateRoute exact path="/" component={Home} />
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/login" component={Login} />
           </Switch>

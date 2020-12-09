@@ -1,5 +1,7 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import { Button, ButtonGroup } from "react-bootstrap";
+import "./MapComponent.css";
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
@@ -33,9 +35,17 @@ const MapComponent = (props) => {
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{ disableDefaultUI: true }}
-        onClick={(e) => console.log(`lat: ${e.latLng.lat()} \nlng: ${e.latLng.lng()}`)}
+        onClick={(e) =>
+          console.log(`lat: ${e.latLng.lat()} \nlng: ${e.latLng.lng()}`)
+        }
       >
         {props.children}
+
+        <ButtonGroup className="mb-2 button-group" size="lg">
+          <Button>Left</Button>
+          <Button>Middle</Button>
+          <Button>Right</Button>
+        </ButtonGroup>
       </GoogleMap>
     </LoadScript>
   );
