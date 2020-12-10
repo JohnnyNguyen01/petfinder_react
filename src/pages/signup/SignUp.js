@@ -1,7 +1,9 @@
-import React, { useRef, useEffect, useState, useContext } from "react";
+import React, { useRef, useContext } from "react";
 import { Form, Button, Card, Alert, Container } from "react-bootstrap";
 import AuthContext from "../../contexts/auth/authContext";
-import {Link} from "react-router-dom";
+import petLoverAnimation from "../../assets/animations/petLoverAnimation.json";
+import Lottie from "lottie-react";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const emailRef = useRef();
@@ -14,9 +16,9 @@ const SignUp = () => {
     e.preventDefault();
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       authContext.setAuthError("Passwords do not match");
-    } else if (emailText === null || emailText === ""){
-      authContext.setAuthError("Please enter a valid email address")
-    }else
+    } else if (emailText === null || emailText === "") {
+      authContext.setAuthError("Please enter a valid email address");
+    } else
       try {
         authContext.setLoading();
         await authContext.signUp(
@@ -34,6 +36,8 @@ const SignUp = () => {
       style={{ minHeight: "100vh" }}
     >
       <div className="w-100" style={{ maxWidth: "400px" }}>
+        <Lottie animationData={petLoverAnimation} style={{ height: "20vh" }} />
+        <h2 className="text-center">Pet Finder</h2>
         <Card>
           <Card.Body>
             {authContext.error && (

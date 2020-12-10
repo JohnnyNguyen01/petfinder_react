@@ -2,6 +2,8 @@ import React, { useContext, useRef, useEffect } from "react";
 import { Container, Form, Card, Button, Alert } from "react-bootstrap";
 import AuthContext from "../../contexts/auth/authContext";
 import { Link, useHistory } from "react-router-dom";
+import petLoverAnimation from "../../assets/animations/petLoverAnimation.json";
+import Lottie from "lottie-react";
 
 const Login = () => {
   const emailRef = useRef();
@@ -10,7 +12,7 @@ const Login = () => {
   let history = useHistory();
 
   useEffect(() => {
-    if(authContext.isSignedIn){
+    if (authContext.isSignedIn) {
       history.push("/");
     }
     //eslint-disable-next-line
@@ -40,6 +42,8 @@ const Login = () => {
       style={{ minHeight: "100vh" }}
     >
       <div className="w-100" style={{ maxWidth: "400px" }}>
+        <Lottie animationData={petLoverAnimation} style={{height: "20vh"}} />
+        <h2 className="text-center">Pet Finder</h2>
         <Card>
           <Card.Body>
             {authContext.error && (

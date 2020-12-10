@@ -69,8 +69,8 @@ const MapComponent = (props) => {
     strokeOpacity: 1,
     strokeWeight: 2,
     clickable: false,
-    draggable: canSetGeofence ? true : false,
-    editable: canSetGeofence ? true : false,
+    draggable: canSetGeofence,
+    editable: canSetGeofence,
     geodesic: false,
     zIndex: 1,
   };
@@ -111,6 +111,7 @@ const MapComponent = (props) => {
             trigger="click"
             key="set-geofence-trigger"
             placement="left"
+            className="button-group"
             overlay={
               <CustomPopover
                 placement="right"
@@ -124,7 +125,7 @@ const MapComponent = (props) => {
             <Dropdown.Item
               href="#/action-1"
               onClick={handleSetGeofenceBtn}
-              // disabled={canSetGeofence ? false : true}
+              disabled={canSetGeofence}
             >
               Set Geofence
             </Dropdown.Item>
@@ -132,7 +133,7 @@ const MapComponent = (props) => {
           <Dropdown.Item
             href="#/action-1"
             onClick={handleConfirmGeofenceBtn}
-            // disabled={canSetGeofence ? true : false}
+            disabled={!canSetGeofence}
           >
             Confirm Geofence
           </Dropdown.Item>
