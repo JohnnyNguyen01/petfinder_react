@@ -16,6 +16,9 @@ const MapComponent = (props) => {
     canSetGeofence,
     addGeofencePoint,
     resetGeofencePoints,
+    setCanSetGeofence,
+    uploadGeofencePoints,
+    setGeofencePointsFromFirebase,
   } = mapComponentContext;
 
   const containerStyle = {
@@ -28,12 +31,13 @@ const MapComponent = (props) => {
     lng: 151.2099,
   };
 
-  const handleLogoutBtn = () => {
-    authContext.logoutUser();
-  };
+  const handleLogoutBtn = () => authContext.logoutUser();
 
-  const handleSetGeofenceBtn = () => {
-    mapComponentContext.setCanSetGeofence(true);
+  const handleSetGeofenceBtn = () => setCanSetGeofence(true);
+
+  const handleConfirmGeofenceBtn = async () => {
+    await uploadGeofencePoints();
+    setCanSetGeofence(false);
   };
 
   const handleRemoveGeofenceBtn = () => resetGeofencePoints();
@@ -52,6 +56,12 @@ const MapComponent = (props) => {
     setMap(null);
   }, []);
 
+  const handleMapOnClick = (e) => {
+    if (canSetGeofence)
+      addGeofencePoint({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+  };
+
+  //todo: move to constants file
   const polygonOptions = {
     fillColor: "lightblue",
     fillOpacity: 0.5,
@@ -59,13 +69,16 @@ const MapComponent = (props) => {
     strokeOpacity: 1,
     strokeWeight: 2,
     clickable: false,
-    draggable: false,
-    editable: true,
+    draggable: canSetGeofence ? true : false,
+    editable: canSetGeofence ? true : false,
     geodesic: false,
     zIndex: 1,
   };
 
-  useEffect(() => {}, [canSetGeofence, geofencePoints]);
+  useEffect(() => {
+    setGeofencePointsFromFirebase();
+    //eslint-disable-next-line
+  }, [canSetGeofence]);
 
   return (
     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
@@ -76,9 +89,7 @@ const MapComponent = (props) => {
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{ disableDefaultUI: true }}
-        onClick={
-          (e) => addGeofencePoint({ lat: e.latLng.lat(), lng: e.latLng.lng() }) //{ lat: e.latLng.lat(), lng: e.latLng.lng() })
-        }
+        onClick={(e) => handleMapOnClick(e)}
       >
         {props.children}
         {Object.keys(geofencePoints).length !== 0 ? (
@@ -110,10 +121,21 @@ const MapComponent = (props) => {
               />
             }
           >
-            <Dropdown.Item href="#/action-1" onClick={handleSetGeofenceBtn}>
+            <Dropdown.Item
+              href="#/action-1"
+              onClick={handleSetGeofenceBtn}
+              // disabled={canSetGeofence ? false : true}
+            >
               Set Geofence
             </Dropdown.Item>
           </OverlayTrigger>
+          <Dropdown.Item
+            href="#/action-1"
+            onClick={handleConfirmGeofenceBtn}
+            // disabled={canSetGeofence ? true : false}
+          >
+            Confirm Geofence
+          </Dropdown.Item>
           <Dropdown.Item href="#/action-2" onClick={handleRemoveGeofenceBtn}>
             Remove Geofence{" "}
           </Dropdown.Item>

@@ -4,7 +4,8 @@ import {
   SET_CAN_SET_GEOGENCE,
   SET_GEOFENCE_POINTS,
   SET_LATEST_MARKER,
-  RESET_GEOFENCE
+  RESET_GEOFENCE,
+  SET_GEOFENCE_POINTS_FROM_FIREBASE,
 } from "../types";
 
 export default (state, action) => {
@@ -13,6 +14,11 @@ export default (state, action) => {
       return {
         ...state,
         marker: action.payload,
+      };
+    case SET_GEOFENCE_POINTS_FROM_FIREBASE:
+      return {
+          ...state,
+          geofencePoints: action.payload
       };
     case SET_GEOFENCE_POINTS:
       return {
@@ -31,8 +37,9 @@ export default (state, action) => {
       };
     case RESET_GEOFENCE:
       return {
-          ...state,
-          geofencePoints: []
+        ...state,
+        geofencePoints: [],
+        canSetGeofence: true
       };
     default:
       return state;

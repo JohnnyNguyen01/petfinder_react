@@ -8,6 +8,7 @@ import {
   SET_CAN_SET_GEOGENCE,
   ADD_GEOFENCE_POINT,
   RESET_GEOFENCE,
+  SET_GEOFENCE_POINTS_FROM_FIREBASE,
 } from "../types";
 
 const MapComponentState = (props) => {
@@ -29,18 +30,20 @@ const MapComponentState = (props) => {
   };
 
   /**
-   * Set the geofencePoints context variable that's used to create the geofence polygon.
-   * @param {list} latLngArray - array of latitude longitude points for the geofence
+   * Set the geofencePoints context variable that's used to create the geofence
+   * polygon.
+   * @param {list} latLngArray - array of latitude longitude points for the
+   * geofence
    */
-  const setGeofencePoints = (latLngArray) => {
+  const setGeofencePoints = (latLngArray) =>
     dispatch({ type: SET_GEOFENCE_POINTS, payload: latLngArray });
-  };
+
   /**
    * Add a new Latitude Longitude object to the `geofencePoints` array.
    * @param {object} latLngObject - the lat lng to be added
    */
   const addGeofencePoint = (latLngObject) => {
-    const updatedGeofencePoints = [...state.geofencePoints, latLngObject]; //state.geofencePoints.push(latLngObject);
+    const updatedGeofencePoints = [...state.geofencePoints, latLngObject];
     dispatch({ type: ADD_GEOFENCE_POINT, payload: updatedGeofencePoints });
   };
 
@@ -49,14 +52,30 @@ const MapComponentState = (props) => {
    * Used to determine user button presses on the map are added to the
    * `geofencePoints` array.
    */
-  const setCanSetGeofence = () => {
+  const setCanSetGeofence = () =>
     dispatch({ type: SET_CAN_SET_GEOGENCE, payload: !state.canSetGeofence });
-  };
+
+  /**
+   * Uppload the geofencePoints array to the `firestore` database
+   */
+  const uploadGeofencePoints = async () =>
+    await Database.instance.uploadGeofenceCoordinates(state.geofencePoints);
 
   /**
    * Reset the `geofencePoints` array.
    */
-  const resetGeofencePoints = () => dispatch({ type: RESET_GEOFENCE });
+  const resetGeofencePoints = () => {
+    Database.instance.uploadGeofenceCoordinates([]);
+    dispatch({ type: RESET_GEOFENCE });
+  };
+
+  /**
+   * Used to update geofencePoints state from Firebase - Firestore values
+   */
+  const setGeofencePointsFromFirebase = async () => {
+    const payload = await Database.instance.getGeofenceCoordinates();
+    dispatch({ type: SET_GEOFENCE_POINTS_FROM_FIREBASE, payload: payload });
+  };
 
   return (
     <MapComponentContext.Provider
@@ -68,7 +87,9 @@ const MapComponentState = (props) => {
         setGeofencePoints,
         setCanSetGeofence,
         addGeofencePoint,
-        resetGeofencePoints
+        resetGeofencePoints,
+        uploadGeofencePoints,
+        setGeofencePointsFromFirebase,
       }}
     >
       {props.children}
