@@ -38,6 +38,7 @@ Pet Tracker uses a number of open source projects to work properly:
 
 ### Todos
 
+- Fix centering bug (each time useEffect on mapComponent called map  is recentered to initial value)
 - Add ability to register multiple devices
 - Create GPS module and stop using a mobile phone
 
