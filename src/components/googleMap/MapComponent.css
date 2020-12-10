@@ -8,11 +8,17 @@
     /* margin-left: 45%;
     margin-top: 62%; */
     position: absolute;
-    top: 5px;
-    right: 7vw;
+    top: 2vh;
+    left: 2vw;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .crosshair-cursor {
     cursor: crosshair;
+}
+
+.toast {
+    position: absolute;
+    top: 8vh;
+    left: 2vh;
 }

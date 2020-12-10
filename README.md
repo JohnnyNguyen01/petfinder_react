@@ -27,6 +27,7 @@ PetTracker is a companion web app I built to allow me to track my pet wherever i
 - PolyLines between current user and pet's current location
 - Geofencing - Can add and remove a geofence
 - Real-time location update of evey pet
+- Authentication with Private Routes
 
 ### Tech
 

@@ -3,11 +3,12 @@ import { GoogleMap, LoadScript, Polygon } from "@react-google-maps/api";
 import "./MapComponent.css";
 import AuthContext from "../../contexts/auth/authContext";
 import MapComponentContext from "../../contexts/mapComponent/mapComponentContext";
-import CustomPopover from "../CustomPopover";
+import CustomToast from "../CustomToast";
 import { DropdownButton, Dropdown, OverlayTrigger } from "react-bootstrap";
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
+  const [showGeoEnabledToast, setShowGeoEnabledToast] = useState(false);
   const authContext = useContext(AuthContext);
   const mapComponentContext = useContext(MapComponentContext);
 
@@ -33,11 +34,15 @@ const MapComponent = (props) => {
 
   const handleLogoutBtn = () => authContext.logoutUser();
 
-  const handleSetGeofenceBtn = () => setCanSetGeofence(true);
+  const handleSetGeofenceBtn = () => {
+    setCanSetGeofence(true);
+    setShowGeoEnabledToast(true);
+  };
 
   const handleConfirmGeofenceBtn = async () => {
     await uploadGeofencePoints();
     setCanSetGeofence(false);
+    setShowGeoEnabledToast(false);
   };
 
   const handleRemoveGeofenceBtn = () => resetGeofencePoints();
@@ -60,6 +65,9 @@ const MapComponent = (props) => {
     if (canSetGeofence)
       addGeofencePoint({ lat: e.latLng.lat(), lng: e.latLng.lng() });
   };
+
+  const toggleGeoEnabledToast = () =>
+    setShowGeoEnabledToast(!showGeoEnabledToast);
 
   //todo: move to constants file
   const polygonOptions = {
@@ -107,29 +115,14 @@ const MapComponent = (props) => {
           className="button-group mb-2"
           size="lg"
         >
-          <OverlayTrigger
-            trigger="click"
-            key="set-geofence-trigger"
-            placement="left"
-            className="button-group"
-            overlay={
-              <CustomPopover
-                placement="right"
-                title="Set Geofence Activated"
-                content={
-                  "You can now set your geofence on the map, when finished, click on Set Geofence again."
-                }
-              />
-            }
+          <Dropdown.Item
+            href="#/action-1"
+            onClick={handleSetGeofenceBtn}
+            disabled={canSetGeofence}
           >
-            <Dropdown.Item
-              href="#/action-1"
-              onClick={handleSetGeofenceBtn}
-              disabled={canSetGeofence}
-            >
-              Set Geofence
-            </Dropdown.Item>
-          </OverlayTrigger>
+            Set Geofence
+          </Dropdown.Item>
+
           <Dropdown.Item
             href="#/action-1"
             onClick={handleConfirmGeofenceBtn}
@@ -142,6 +135,15 @@ const MapComponent = (props) => {
           </Dropdown.Item>
           <Dropdown.Item onClick={handleLogoutBtn}>Logout</Dropdown.Item>
         </DropdownButton>
+        {
+          <CustomToast
+            className="toast"
+            show={showGeoEnabledToast}
+            onClose={toggleGeoEnabledToast}
+            title="Set Geofence Enabled"
+            content="Geofencing enabled, when you're done setting it, click confirm to uplaod and co-ordinates"
+          />
+        }
       </GoogleMap>
     </LoadScript>
   );
