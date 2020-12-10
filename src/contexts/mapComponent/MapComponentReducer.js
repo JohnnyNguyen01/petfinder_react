@@ -39,7 +39,7 @@ export default (state, action) => {
       return {
         ...state,
         geofencePoints: [],
-        canSetGeofence: true
+        canSetGeofence: false
       };
     default:
       return state;

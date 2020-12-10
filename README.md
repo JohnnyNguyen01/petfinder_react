@@ -42,7 +42,7 @@ Pet Tracker uses a number of open source projects to work properly:
 - Create GPS module and stop using a mobile phone
 
 ### Screenshots
-
+<!-- 
 <table>
     <tr>
         <td><img src="readme_files/screenshots/splashScreen.png" width=180px height=360px/></td>
@@ -54,4 +54,4 @@ Pet Tracker uses a number of open source projects to work properly:
         <td><img src="readme_files/screenshots/bottomsheet.png" width=180px height=360px/></td>
         <td><img src="readme_files/screenshots/gpsScreen.png" width=180px height=360px/></td>
     </tr>
-</table>
+</table> -->
