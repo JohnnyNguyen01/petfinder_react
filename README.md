@@ -42,10 +42,12 @@ Pet Tracker uses a number of open source projects to work properly:
 - Create GPS module and stop using a mobile phone
 
 ### Demo
-<a href="https://github.com/Johnnythenewbie/petfinder_react">Demo Link</a>
+
+<a href="https://youtu.be/9nyZNxo9wW0">Demo Link</a>
 
 ### Screenshots
-<!-- 
+
+<!--
 <table>
     <tr>
         <td><img src="readme_files/screenshots/splashScreen.png" width=180px height=360px/></td>
