@@ -9,6 +9,8 @@ import { DropdownButton, Dropdown, OverlayTrigger } from "react-bootstrap";
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
   const [showGeoEnabledToast, setShowGeoEnabledToast] = useState(false);
+  const [mapCenter, setMapCenter] = useState({});
+  const [isMounted, setIsMounted] = useState(false);
   const authContext = useContext(AuthContext);
   const mapComponentContext = useContext(MapComponentContext);
 
@@ -25,11 +27,6 @@ const MapComponent = (props) => {
   const containerStyle = {
     width: "100%",
     height: "100vh",
-  };
-
-  const center = {
-    lat: -33.865143,
-    lng: 151.2099,
   };
 
   const handleLogoutBtn = () => authContext.logoutUser();
@@ -84,15 +81,23 @@ const MapComponent = (props) => {
   };
 
   useEffect(() => {
+    if (isMounted) {
+      setMapCenter({});
+    }
+    if (!isMounted) {
+      setIsMounted(true);
+    }
     setGeofencePointsFromFirebase();
     //eslint-disable-next-line
-  }, [canSetGeofence]);
+  }, [ canSetGeofence]);
+
+  const center = {lat: -33.865143, lng: 151.2099 };
 
   return (
     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={center}
+        center={!isMounted ? center : mapCenter}
         zoom={10}
         onLoad={onLoad}
         onUnmount={onUnmount}
