@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { GoogleMap, LoadScript, Polygon } from "@react-google-maps/api";
 import "./MapComponent.css";
 import AuthContext from "../../contexts/auth/authContext";
@@ -8,9 +8,9 @@ import { DropdownButton, Dropdown } from "react-bootstrap";
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
+  const [renderCount, setRenderCount] = useState(0);
   const [showGeoEnabledToast, setShowGeoEnabledToast] = useState(false);
   const [mapCenter, setMapCenter] = useState({});
-  const [isMounted, setIsMounted] = useState(false);
   const authContext = useContext(AuthContext);
   const mapComponentContext = useContext(MapComponentContext);
 
@@ -79,10 +79,10 @@ const MapComponent = (props) => {
   };
 
   useEffect(() => {
-    if (!isMounted) {
-      setIsMounted(true);
-    }
+    if (renderCount < 2) {
+    } else setMapCenter({});
     setGeofencePointsFromFirebase();
+    setRenderCount(renderCount + 1);
     //eslint-disable-next-line
   }, [canSetGeofence]);
 
@@ -92,7 +92,7 @@ const MapComponent = (props) => {
     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={isMounted ? { lat: -33.865143, lng: 151.2099 } : {}}
+        center={renderCount <= 1 ? { lat: -33.865143, lng: 151.2099 } : {}}
         zoom={10}
         onLoad={onLoad}
         onUnmount={onUnmount}
