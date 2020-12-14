@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import MapComponentContext from "./mapComponentContext";
 import MapComponentReducer from "./MapComponentReducer";
-import Database from "../../utils/database";
+import database from "../../utils/database";
 import {
   SET_GEOFENCE_POINTS,
   SET_LATEST_MARKER,
@@ -25,7 +25,7 @@ const MapComponentState = (props) => {
    * according to it's latitude - longitude properties
    */
   const setLatestMarker = async () => {
-    const latestGeoPoint = await Database.instance.getLatestMarker();
+    const latestGeoPoint = await database.getLatestMarker();
     dispatch({ type: SET_LATEST_MARKER, payload: latestGeoPoint });
   };
 
@@ -59,13 +59,13 @@ const MapComponentState = (props) => {
    * Uppload the geofencePoints array to the `firestore` database
    */
   const uploadGeofencePoints = async () =>
-    await Database.instance.uploadGeofenceCoordinates(state.geofencePoints);
+    await database.uploadGeofenceCoordinates(state.geofencePoints);
 
   /**
    * Reset the `geofencePoints` array.
    */
   const resetGeofencePoints = () => {
-    Database.instance.uploadGeofenceCoordinates([]);
+    database.uploadGeofenceCoordinates([]);
     dispatch({ type: RESET_GEOFENCE });
   };
 
@@ -73,7 +73,7 @@ const MapComponentState = (props) => {
    * Used to update geofencePoints state from Firebase - Firestore values
    */
   const setGeofencePointsFromFirebase = async () => {
-    const payload = await Database.instance.getGeofenceCoordinates();
+    const payload = await database.getGeofenceCoordinates();
     dispatch({ type: SET_GEOFENCE_POINTS_FROM_FIREBASE, payload: payload });
   };
 

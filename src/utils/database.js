@@ -1,10 +1,16 @@
 import { db } from "../firebase";
 
 class Database {
+  
   /**
    * Singleton instance
    */
-  static instance = new Database();
+  constructor(){
+    if(Database.instance == null){
+      this.instance = this;
+    }
+    return Database.instance;
+  }
 
   /**
    * Retrieve latest gps coordinate from the `Device Coordinates` collection
@@ -54,4 +60,7 @@ class Database {
   }
 }
 
-export default Database;
+const database = new Database();
+Object.freeze(database);
+
+export default database;

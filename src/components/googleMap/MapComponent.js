@@ -4,7 +4,7 @@ import "./MapComponent.css";
 import AuthContext from "../../contexts/auth/authContext";
 import MapComponentContext from "../../contexts/mapComponent/mapComponentContext";
 import CustomToast from "../CustomToast";
-import { DropdownButton, Dropdown, OverlayTrigger } from "react-bootstrap";
+import { DropdownButton, Dropdown } from "react-bootstrap";
 
 const MapComponent = (props) => {
   const [map, setMap] = useState(null);
@@ -50,9 +50,7 @@ const MapComponent = (props) => {
     setMap(map);
   }, []);
 
-  const onPolygonLoad = (polygon) => {
-    console.log("polygon: ", polygon);
-  };
+  const onPolygonLoad = (polygon) => {};
 
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null);
@@ -81,23 +79,20 @@ const MapComponent = (props) => {
   };
 
   useEffect(() => {
-    if (isMounted) {
-      setMapCenter({});
-    }
     if (!isMounted) {
       setIsMounted(true);
     }
     setGeofencePointsFromFirebase();
     //eslint-disable-next-line
-  }, [ canSetGeofence]);
+  }, [canSetGeofence]);
 
-  const center = {lat: -33.865143, lng: 151.2099 };
-
+  //todo: check why mapCenter doesn't work after it's initialized to the below latlng
+  console.log(mapCenter);
   return (
     <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
       <GoogleMap
         mapContainerStyle={containerStyle}
-        center={!isMounted ? center : mapCenter}
+        center={isMounted ? { lat: -33.865143, lng: 151.2099 } : {}}
         zoom={10}
         onLoad={onLoad}
         onUnmount={onUnmount}

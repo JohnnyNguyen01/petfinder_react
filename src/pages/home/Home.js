@@ -14,6 +14,7 @@ const Home = () => {
 
   useEffect(() => {
     getLatestMarker();
+    setTimeout(getLatestMarker, 5000);
     // eslint-disable-next-line
   }, []);
 
